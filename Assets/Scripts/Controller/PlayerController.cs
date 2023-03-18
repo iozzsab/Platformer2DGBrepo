@@ -28,12 +28,15 @@ namespace PlatformerMVC
         private LevelObjectView _playerView;
 
 
-        public PlayerController(LevelObjectView player)
+        public PlayerController(LevelObjectView playerView)
         {
+            _playerView = playerView;
+            _playerT = playerView._transform;
+            
             _config = Resources.Load<AnimationConfig>("SpriteAnimCfg");
             _playerAnimator = new SpriteAnimatorController(_config);
-            _playerAnimator.StartAnimation(player._spriteRenderer, AnimState.Run, true, 10f);
-            _playerT = player.transform;
+            _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Idle, true, _animationSpeed);
+            
         }
 
         private void MoveTowards()
@@ -53,7 +56,6 @@ namespace PlatformerMVC
             _playerAnimator.Update();
             _xAxisInput = Input.GetAxis("Horizontal");
             _isJump = Input.GetAxis("Vertical") > 0;
-
             _isMoving = Mathf.Abs(_xAxisInput) > _movingTreshold;
 
             if (_isMoving)
@@ -61,12 +63,11 @@ namespace PlatformerMVC
                 MoveTowards();
             }
 
+            _playerAnimator.StartAnimation(_playerView._spriteRenderer, _isMoving ? AnimState.Run : AnimState.Idle,
+                true, _animationSpeed);
             if (IsGrounded())
             {
-                _playerAnimator.StartAnimation(_playerView._spriteRenderer, _isMoving ? AnimState.Run : AnimState.Idle,
-                    true, _animationSpeed);
-
-                if (_isJump && _yVelocity <= 0)
+                if (_isJump && _yVelocity == 0)
                 {
                     _yVelocity = _jumpForce;
                 }
@@ -82,7 +83,8 @@ namespace PlatformerMVC
                 {
                     _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Jump, true, _animationSpeed);
                 }
-                _yVelocity+=_g*Time.deltaTime;
+
+                _yVelocity += _g * Time.deltaTime;
                 _playerT.position += Vector3.up * (Time.deltaTime * _yVelocity);
             }
         }

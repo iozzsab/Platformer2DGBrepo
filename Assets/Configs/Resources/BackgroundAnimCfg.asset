@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Backgrounds:
   - Track: 0
-    Sprites: []
+    Sprites:
+    - {fileID: 21300000, guid: 6a8b51cdd8e120344944f6b024231653, type: 3}
+    - {fileID: 21300000, guid: 55afc4e7a9339724895f7d6841b1acac, type: 3}

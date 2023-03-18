@@ -5,7 +5,6 @@ namespace PlatformerMVC
 {
     public class Main : MonoBehaviour
     {
-
         private PlayerController _playerController;
         [SerializeField] private LevelObjectView _playerView;
 
