@@ -4,77 +4,77 @@ namespace PlatformerMVC
 {
     public class PlayerController
     {
-        private float _xAxisInput;
-        private bool _isJump;
+        private AnimationConfig _config;
+        private SpriteAnimatorController _playerAnimator;
+        private LevelObjectView _playerView;
+        private ContactPooler _contactPooler;
+       
+        private Transform _playerT;
+        private Rigidbody2D _rb;
 
-        private float _walkSpeed = 3f;
-        private float _animationSpeed = 10f;
+        private float _walkSpeed = 150f;
+        private float _animationSpeed = 14f;
         private float _movingTreshold = 0.1f;
+        private float _jumpForce = 9f;
+        private float _jupmTreshold = 1f;
+        private bool _isJump;
+        private bool _isMoving;
 
         private Vector3 _leftScale = new Vector3(-1, 1, 1);
         private Vector3 _rightScale = new Vector3(1, 1, 1);
 
-        private bool _isMoving;
-        private float _jumpForce = 9f;
-        private float _jupmTreshold = 1f;
-        private float _g = -9.8f;
-        private float _groundLevel = 0.5f;
-        private float _yVelocity;
-
-        private Transform _playerT;
-
-        private AnimationConfig _config;
-        private SpriteAnimatorController _playerAnimator;
-        private LevelObjectView _playerView;
+        private float _yVelocity = 0;
+        private float _xVelocity = 0;
+        private float _xAxisInput;
 
 
         public PlayerController(LevelObjectView playerView)
         {
             _playerView = playerView;
             _playerT = playerView._transform;
-            
+            _rb = playerView._rb;
+
             _config = Resources.Load<AnimationConfig>("SpriteAnimCfg");
             _playerAnimator = new SpriteAnimatorController(_config);
             _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Idle, true, _animationSpeed);
-            
+            _contactPooler = new ContactPooler(_playerView._collider);
         }
 
         private void MoveTowards()
         {
-            _playerT.position += Vector3.right * (Time.deltaTime * _walkSpeed * (_xAxisInput < 0 ? -1 : 1));
-
+            _xVelocity = Time.fixedDeltaTime * _walkSpeed * (_xAxisInput < 0 ? -1 : 1);
+            _rb.velocity = new Vector2(_xVelocity, _yVelocity);
             _playerT.localScale = _xAxisInput < 0 ? _leftScale : _rightScale;
         }
 
-        public bool IsGrounded()
-        {
-            return _playerT.position.y <= _groundLevel && _yVelocity <= 0;
-        }
 
         public void Update()
         {
             _playerAnimator.Update();
+            _contactPooler.Update();
             _xAxisInput = Input.GetAxis("Horizontal");
             _isJump = Input.GetAxis("Vertical") > 0;
+            _yVelocity = _rb.velocity.y;
             _isMoving = Mathf.Abs(_xAxisInput) > _movingTreshold;
+            _playerAnimator.StartAnimation(_playerView._spriteRenderer, _isMoving ? AnimState.Run : AnimState.Idle,
+                true, _animationSpeed);
 
             if (_isMoving)
             {
                 MoveTowards();
             }
-
-            _playerAnimator.StartAnimation(_playerView._spriteRenderer, _isMoving ? AnimState.Run : AnimState.Idle,
-                true, _animationSpeed);
-            if (IsGrounded())
+            else
             {
-                if (_isJump && _yVelocity == 0)
+                _xVelocity = 0;
+                _rb.velocity = new Vector2(_xVelocity, _rb.velocity.y);
+            }
+
+
+            if (_contactPooler.IsGrounded)
+            {
+                if (_isJump && _yVelocity <= _jupmTreshold)
                 {
-                    _yVelocity = _jumpForce;
-                }
-                else if (_yVelocity < 0)
-                {
-                    _yVelocity = 0;
-                    _playerT.position = new Vector3(_playerT.position.x, _groundLevel, _playerT.position.z);
+                    _rb.AddForce(Vector2.up * _jumpForce, ForceMode2D.Impulse);
                 }
             }
             else
@@ -83,9 +83,6 @@ namespace PlatformerMVC
                 {
                     _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Jump, true, _animationSpeed);
                 }
-
-                _yVelocity += _g * Time.deltaTime;
-                _playerT.position += Vector3.up * (Time.deltaTime * _yVelocity);
             }
         }
     }
