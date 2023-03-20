@@ -8,12 +8,10 @@ namespace PlatformerMVC
         private PlayerController _playerController;
         private CannonController _cannonController;
         private EmitterController _emitterController;
-        [SerializeField] private LevelObjectView _playerView;
+        [SerializeField] private InteractiveObjectView _playerView;
         [SerializeField] private CannonView _cannonView;
         
         
-       
-
         private void Awake()
         {
             _playerController = new PlayerController(_playerView);

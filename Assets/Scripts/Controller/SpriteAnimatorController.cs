@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PlatformerMVC
 
 {
-    public class SpriteAnimatorController : IDisposable
+    public class SpriteAnimatorController
     {
         private sealed class Animation
         {
@@ -46,7 +46,7 @@ namespace PlatformerMVC
 
         public void StartAnimation(SpriteRenderer spriteRenderer, AnimState track, bool loop, float speed)
         {
-            if(_activeAnimation.TryGetValue(spriteRenderer, out var animation))
+            if (_activeAnimation.TryGetValue(spriteRenderer, out var animation))
             {
                 animation.Loop = loop;
                 animation.Speed = speed;
@@ -58,7 +58,6 @@ namespace PlatformerMVC
                     animation.Sprites = _config.Sequences.Find(sequence => sequence.Track == track).Sprites;
                     animation.Counter = 0;
                 }
-
             }
             else
             {
@@ -69,7 +68,6 @@ namespace PlatformerMVC
                     Loop = loop,
                     Speed = speed
                 });
-                
             }
         }
 
@@ -80,7 +78,7 @@ namespace PlatformerMVC
                 _activeAnimation.Remove(sprite);
             }
         }
-        
+
 
         public void Update()
         {
@@ -91,14 +89,7 @@ namespace PlatformerMVC
                 {
                     animation.Key.sprite = animation.Value.Sprites[(int)animation.Value.Counter];
                 }
-                
             }
-            
-        }
-
-
-        public void Dispose()
-        {
         }
     }
 }

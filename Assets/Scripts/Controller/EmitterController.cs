@@ -34,7 +34,7 @@ namespace PlatformerMVC
             else
             {
                 _timeTillNewBull = _delay;
-                _bulletControllers[_index].Trow(_tr.position, _tr.up * _startSpeed);
+                _bulletControllers[_index].Trow(_tr.position, - _tr.up * _startSpeed);
                 _index++;
                 if (_index >= _bulletControllers.Count) _index = 0;
             }
