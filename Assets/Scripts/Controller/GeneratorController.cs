@@ -16,6 +16,8 @@ namespace PlatformerMVC
         private bool _borders;
         private int[,] _map;
 
+        private MarshingSquareController _controller;
+
 
         public GeneratorController(GeneratorLevelView view)
         {
@@ -27,17 +29,22 @@ namespace PlatformerMVC
             _smoothPercent = view.smoothPercent;
             _borders = view.borders;
             _map = new int[_mapWidth, _mapHeight];
+
+           
         }
 
         public void Start()
         {
             FillMap();
-            // for (int i = 0; i < _smoothPercent; i++)
-            // {
-            //     SmoothMap();
-            // }
+            for (int i = 0; i < _smoothPercent; i++)
+            {
+                SmoothMap();
+            }
+            _controller = new MarshingSquareController();
+            _controller.GenerateGrid(_map, 1);
+            _controller.DrawTiles(_tilemap, _tile);
 
-            DrawTiles();
+            //DrawTiles();
         }
 
         public void FillMap()
@@ -88,7 +95,7 @@ namespace PlatformerMVC
 
             for (int gridX = x - 1; gridX <= x + 1; gridX++)
             {
-                for (int gridY = y - 1; gridX <= y + 1; gridY++)
+                for (int gridY = y - 1; gridY <= y + 1; gridY++)
                 {
                     if (gridX >= 0 && gridX < _mapWidth && gridY >= 0 && gridY < _mapHeight)
                     {
