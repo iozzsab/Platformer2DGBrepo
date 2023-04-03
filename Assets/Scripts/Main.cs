@@ -10,6 +10,7 @@ namespace PlatformerMVC
         [SerializeField] private GeneratorLevelView _generatorView;
         
         
+        
         //
         [SerializeField] private QuestObjectView _singleQuestItem;
         
@@ -35,6 +36,7 @@ namespace PlatformerMVC
             
             //
             _questController = new QuestController(_playerView, new QuestCoinModel(), _singleQuestItem);
+            
             _questController.Reset();
         }
 
