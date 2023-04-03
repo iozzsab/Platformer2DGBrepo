@@ -16,7 +16,7 @@ namespace PlatformerMVC
         private float _animationSpeed = 14f;
         private float _movingTreshold = 0.1f;
         private float _jumpForce = 9f;
-        private float _jupmTreshold = 1f;
+        private float _jupmTreshold = 2f;
         private bool _isJump;
         private bool _isMoving;
 

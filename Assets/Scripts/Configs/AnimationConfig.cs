@@ -8,7 +8,17 @@ namespace PlatformerMVC
     {
         Idle = 0,
         Run = 1,
-        Jump = 2,
+        RunAttack = 2,
+        Walk = 3,
+        Jump = 4,
+        Dead = 5,
+        Hurt = 6,
+        Defend = 7,
+        Protect = 8,
+        Attack1 = 9,
+        Attack2 = 10,
+        Attack3 = 11
+        
     }
 
     [CreateAssetMenu(fileName = "SpriteAnimatorCfg", menuName = "Configs / AnimationConfig", order = 1)]
