@@ -2,7 +2,7 @@
 {
     public class BulletView : LevelObjectView
     {
-        private int _damagePoint = 50;
+        private int _damagePoint = 10;
 
         public int DamagePoint
         {

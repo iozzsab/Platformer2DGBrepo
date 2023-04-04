@@ -6,7 +6,7 @@ namespace PlatformerMVC
     {
         public Transform _transform;
         public SpriteRenderer _spriteRenderer;
-        public Collider2D _collider;
+        public BoxCollider2D _collider;
         public Rigidbody2D _rb;
 
     }
