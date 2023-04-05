@@ -132,22 +132,22 @@ namespace PlatformerMVC
             if (_isHurt)
             {
                 _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Hurt, false, _animationSpeed);
+                return;
             }
-            else
+
+            if (_isMoving && !_isJumping)
             {
-                if (_isMoving && !_isJumping)
-                {
-                    _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Run, true, _animationSpeed);
-                }
-                else if (!_contactPooler.IsGrounded)
-                {
-                    _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Jump, false, _animationSpeed);
-                }
-                else
-                {
-                    _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Idle, true, _animationSpeed);
-                }
+                _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Run, true, _animationSpeed);
+                return;
             }
+
+            if (!_contactPooler.IsGrounded)
+            {
+                _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Jump, false, _animationSpeed);
+                return;
+            }
+
+            _playerAnimator.StartAnimation(_playerView._spriteRenderer, AnimState.Idle, true, _animationSpeed);
         }
 
         public void RecountBoxColliderSize()
